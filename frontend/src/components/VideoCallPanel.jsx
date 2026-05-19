@@ -63,13 +63,13 @@ function MediaStreamView({ stream, muted = false }) {
         autoPlay
         playsInline
         muted={muted}
-        className="h-36 w-full rounded-md border border-slate-700 bg-slate-950 object-cover"
+        className="h-36 w-full rounded-md border border-white/10 bg-black/30 object-cover"
       />
     );
   }
 
   return (
-    <div className="rounded-md border border-slate-700 bg-slate-950 p-3">
+    <div className="rounded-md border border-white/10 bg-black/30 p-3">
       <audio ref={mediaRef} autoPlay controls muted={muted} className="w-full" />
       <p className="mt-2 text-xs text-slate-400">Audio-only stream</p>
     </div>
@@ -423,10 +423,10 @@ function VideoCallPanel({
   }
 
   return (
-    <section className="rounded-xl border border-slate-700 bg-slate-900/70 p-4">
+    <section className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h3 className="text-base font-semibold">Video Call (WebRTC)</h3>
-        <span className="rounded bg-slate-800 px-2 py-1 text-xs text-slate-300">
+        <span className="rounded bg-white/10 px-2 py-1 text-xs text-slate-300">
           {connectionStatus}
         </span>
       </div>
@@ -440,7 +440,7 @@ function VideoCallPanel({
           value={mediaPreference}
           onChange={(event) => setMediaPreference(event.target.value)}
           disabled={isInCall || isJoining || disabled}
-          className="rounded-md border border-slate-700 bg-slate-950 px-2 py-1.5 text-sm"
+          className="rounded-md border border-white/10 bg-black/30 px-2 py-1.5 text-sm"
         >
           <option value="audio-video">Audio + Video</option>
           <option value="audio">Audio Only</option>
@@ -469,7 +469,7 @@ function VideoCallPanel({
           type="button"
           onClick={toggleMute}
           disabled={!isInCall}
-          className="rounded-md border border-slate-600 px-3 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-60"
+          className="rounded-md border border-white/10 hover:bg-white/5 transition-all duration-200 active:scale-95 px-3 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-60"
         >
           {muted ? "Unmute" : "Mute"}
         </button>
@@ -478,7 +478,7 @@ function VideoCallPanel({
           type="button"
           onClick={toggleCamera}
           disabled={!isInCall || mediaPreference === "audio"}
-          className="rounded-md border border-slate-600 px-3 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-60"
+          className="rounded-md border border-white/10 hover:bg-white/5 transition-all duration-200 active:scale-95 px-3 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-60"
         >
           {cameraOff ? "Camera On" : "Camera Off"}
         </button>
@@ -489,7 +489,7 @@ function VideoCallPanel({
       </p>
 
       <div className="mt-3 grid gap-3 md:grid-cols-2">
-        <div className="rounded-lg border border-slate-700 bg-slate-950/70 p-2">
+        <div className="rounded-lg border border-white/10 bg-black/20 p-2">
           <p className="mb-2 text-xs uppercase tracking-wide text-slate-400">You</p>
           {localStream ? (
             <MediaStreamView stream={localStream} muted />
@@ -498,14 +498,14 @@ function VideoCallPanel({
           )}
         </div>
 
-        <div className="rounded-lg border border-slate-700 bg-slate-950/70 p-2">
+        <div className="rounded-lg border border-white/10 bg-black/20 p-2">
           <p className="mb-2 text-xs uppercase tracking-wide text-slate-400">
             Remote ({remoteStreamEntries.length})
           </p>
           {remoteStreamEntries.length ? (
             <div className="space-y-2">
               {remoteStreamEntries.map((entry) => (
-                <div key={entry.remotePeerId} className="rounded-md border border-slate-700 bg-slate-900/70 p-2">
+                <div key={entry.remotePeerId} className="rounded-md border border-white/10 bg-white/5 backdrop-blur-md p-2">
                   <p className="mb-1 text-sm font-medium text-slate-100">
                     {entry.userName}
                     {entry.userId ? ` (${entry.userId.slice(0, 6)})` : ""}
