@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(uuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  sessions     Session[]
+  chatMessages ChatMessage[]
+}
+
+model Session {
+  id             String   @id @default(uuid())
+  userId         String
+  refreshTokenId String   @unique
+  expiresAt      DateTime
+  revokedAt      DateTime?
+  createdAt      DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model ChatMessage {
+  id          String          @id @default(uuid())
+  roomId      String
+  userId      String
+  messageType ChatMessageType @default(TEXT)
+  text        String          @db.Text
+  gifUrl      String?
+  createdAt   DateTime        @default(now())
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([roomId, createdAt])
+  @@index([userId, createdAt])
+}
+
+enum ChatMessageType {
+  TEXT
+  GIF
+}
