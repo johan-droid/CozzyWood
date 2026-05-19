@@ -1,187 +1,179 @@
-# UI/UX Design System - Phase 6
+# Cozzywood
 
-A modern, beautiful UI/UX design system built with cutting-edge frontend technologies.
+Cozzywood is a full-stack media room app with synchronized playback, realtime chat, and browser-based video calls.
 
-## 🎨 Features
+## Tech Stack
 
-### Frontend Stack
-- **Tailwind CSS** - Utility-first CSS framework with custom theme
-  - Dark mode support
-  - Warm amber and rose color accents
-  - Custom configuration for brand colors
+- Frontend: React 19, Vite 8, React Router, Axios, Socket.IO client, PeerJS, React Player, Plyr, hls.js, Emoji Mart
+- Backend: Node.js 22, Express 5, Socket.IO 4, Prisma, PostgreSQL, JWT auth, Peer server, optional Redis adapter
 
-- **Framer Motion** - Smooth animations and transitions
-  - Page transitions
-  - Hover effects
-  - Scroll-based animations
-  - Gesture support
+## Repository Layout
 
-- **Lucide React** - Beautiful icon library
-  - Consistent iconography
-  - SVG-based icons
-  - Extensive icon collection
+```text
+backend/
+  prisma/
+  src/
+frontend/
+  src/
+```
 
-- **Google Fonts API** - Custom typography
-  - **Quicksand** - Rounded sans-serif for headings
-  - **Poppins** - Geometric sans-serif for body text
+## Prerequisites
 
-### Assets
-- **Unsplash Images** - Free, high-quality background images
-  - No API key required for direct URLs
-  - Beautiful decorative visuals
-  - Responsive image loading
+- Node.js 22.x
+- npm
+- PostgreSQL
+- Optional for production-grade realtime scaling: Redis
 
-## 🚀 Getting Started
+## Quick Start
 
-### Prerequisites
-- Node.js 18+ 
-- npm or yarn
-
-### Installation
+### 1) Backend
 
 ```bash
-# Install dependencies
+cd backend
+cp .env.example .env
 npm install
-
-# Start development server
+npx prisma generate
+npx prisma migrate dev --name init
 npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
 ```
 
-## 📁 Project Structure
+Backend runs on http://localhost:4000.
 
-```
-/workspace
-├── src/
-│   ├── components/
-│   │   ├── Navbar.tsx       # Navigation bar with theme toggle
-│   │   ├── Hero.tsx         # Hero section with animations
-│   │   ├── Features.tsx     # Feature cards grid
-│   │   ├── Gallery.tsx      # Unsplash image gallery
-│   │   ├── Card.tsx         # Reusable card component
-│   │   ├── Button.tsx       # Animated button component
-│   │   ├── ThemeToggle.tsx  # Dark/Light mode switch
-│   │   └── Footer.tsx       # Footer component
-│   ├── hooks/
-│   │   └── useTheme.tsx     # Theme context hook
-│   ├── App.tsx              # Main application
-│   ├── main.tsx             # Entry point
-│   └── index.css            # Global styles + Tailwind
-├── index.html               # HTML template with Google Fonts
-├── tailwind.config.js       # Tailwind configuration
-├── postcss.config.js        # PostCSS configuration
-├── vite.config.ts           # Vite configuration
-├── tsconfig.json            # TypeScript configuration
-└── package.json             # Dependencies
+Health check: GET http://localhost:4000/api/health
+
+### 2) Frontend
+
+```bash
+cd frontend
+cp .env.example .env
+npm install
+npm run dev
 ```
 
-## 🎯 Components
+Frontend runs on http://localhost:5173.
 
-### ThemeToggle
-Animated sun/moon icon button for switching between light and dark modes.
+## Feature Summary
 
-### Hero
-Full-screen hero section with:
-- Parallax background image
-- Animated gradient orbs
-- Staggered text animations
-- Call-to-action buttons
+### Auth
 
-### Card
-Reusable card component with:
-- Hover animations
-- Icon support
-- Image support
-- Glassmorphism effect
+- Register, login, refresh, logout, current-user profile
+- JWT access + refresh token flow
+- Cookie-based refresh token handling
 
-### Button
-Animated button with variants:
-- Primary (gradient)
-- Secondary (solid)
-- Outline (border)
+### Media
 
-### Features
-Grid of feature cards showcasing design system capabilities.
+- Protected media room route
+- Unified playback for YouTube and direct URLs
+- HLS playback support via hls.js + Plyr
+- Media upload endpoint with local or S3-compatible storage
+- Optional ffmpeg transcode pipeline
+- YouTube and Spotify search integrations
 
-### Gallery
-Responsive image gallery using Unsplash photos.
+### Realtime Sync
 
-## 🎨 Color Palette
+- JWT-protected Socket.IO connection
+- Room join/leave and state snapshot sync
+- Sync events for source, play/pause, seek, buffering, playback rate
+- Presence updates per room
+- Redis-backed adapter/state store when REDIS_URL is configured
 
-### Amber (Warm)
-- 50-900 scale available
-- Primary accent color
-- Used for highlights and CTAs
+### Realtime Chat
 
-### Rose (Warm)
-- 50-900 scale available
-- Secondary accent color
-- Used for gradients and accents
+- Chat over the authenticated Socket.IO channel
+- PostgreSQL persistence through Prisma
+- Room history replay on join/snapshot
+- Message types: TEXT and GIF
 
-## 🔧 Configuration
+### Video Call (WebRTC)
 
-### Tailwind Config
-Custom theme extends default Tailwind with:
-- Font families (Quicksand, Poppins)
-- Extended amber colors
-- Extended rose colors
-- Dark mode class strategy
+- Self-hosted PeerJS signaling endpoint on backend
+- In-room peer announcements over Socket.IO
+- Local + remote stream rendering in frontend panel
+- Dynamic ICE provider support: stun, twilio, metered, custom
 
-### Google Fonts
-Loaded in `index.html`:
-```html
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-```
+## API Endpoints
 
-## 📝 Usage Examples
+### Auth
 
-### Using Components
-```tsx
-import { Button, Card, ThemeToggle } from './components';
+- POST /api/auth/register
+- POST /api/auth/login
+- POST /api/auth/refresh
+- POST /api/auth/logout
+- GET /api/auth/me
 
-function MyComponent() {
-  return (
-    <div>
-      <ThemeToggle />
-      <Button variant="primary">Click Me</Button>
-      <Card title="Hello" description="World" />
-    </div>
-  );
-}
-```
+### Media
 
-### Using Theme Hook
-```tsx
-import { useTheme } from './hooks/useTheme';
+- GET /api/media/youtube/search?q=...
+- GET /api/media/spotify/search?q=...
+- GET /api/media/spotify/config
+- GET /api/media/spotify/auth-url
+- POST /api/media/spotify/token
+- POST /api/media/spotify/refresh
+- POST /api/media/upload (form-data key: media)
 
-function ThemedComponent() {
-  const { isDark, toggleTheme } = useTheme();
-  
-  return (
-    <div className={isDark ? 'dark' : 'light'}>
-      {/* Your content */}
-    </div>
-  );
-}
-```
+### WebRTC
 
-## 🌟 Animations
+- GET /api/webrtc/config
+- GET /api/webrtc/ice-servers
 
-All components use Framer Motion for:
-- **Entrance animations** - Elements fade/slide in on mount
-- **Hover effects** - Scale, rotate, and color transitions
-- **Scroll animations** - Trigger animations when elements enter viewport
-- **Theme transitions** - Smooth color changes between modes
+## Realtime Socket Events
 
-## 📄 License
+### Sync
 
-MIT License - feel free to use this design system in your projects!
+- sync:source-change
+- sync:play
+- sync:pause
+- sync:seek
+- sync:buffer
+- sync:rate-change
+- presence:update
 
----
+### Chat
 
-Built with ❤️ using React, Tailwind CSS, Framer Motion, and Lucide Icons
+- chat:send
+- chat:new
+- chat:history-request
+- chat:history
+
+### WebRTC
+
+- webrtc:announce
+- webrtc:update-media
+- webrtc:clear
+- webrtc:peer-announced
+- webrtc:peer-cleared
+
+## Environment Variables
+
+Use these files as the source of truth:
+
+- backend/.env.example
+- frontend/.env.example
+
+Important backend keys:
+
+- DATABASE_URL
+- JWT_ACCESS_SECRET
+- JWT_REFRESH_SECRET
+- CLIENT_ORIGIN
+- REDIS_URL (optional)
+- MEDIA_STORAGE and S3_* keys (if using S3/R2)
+- WEBRTC_ICE_PROVIDER plus provider-specific keys
+
+Important frontend keys:
+
+- VITE_API_URL
+- VITE_SOCKET_URL
+- VITE_SOCKET_PATH
+
+## Database Notes
+
+If you hit local setup issues for chat schema creation, run:
+
+- backend/prisma/manual/phase4_chat.sql
+
+## Production Notes
+
+- Set PEER_SERVER_PROXIED=true when behind a reverse proxy
+- If scaling to multiple backend instances, configure Redis for Socket.IO adapter/state sync
+- Ensure frontend origin and socket CORS settings match your deployed domains
