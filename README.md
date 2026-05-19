@@ -1,25 +1,47 @@
 # Cozzywood
 
-Phase 1 scaffold is now set up with:
+Cozzywood is a full-stack media room app with synchronized playback, realtime chat, and browser-based video calls.
 
-- `frontend`: React + React Router + Axios + Tailwind CSS
-- `backend`: Express + Prisma + PostgreSQL + bcrypt + JWT + cookie-parser
+## Tech Stack
 
-## Run Locally
+- Frontend: React 19, Vite 8, React Router, Axios, Socket.IO client, PeerJS, React Player, Plyr, hls.js, Emoji Mart
+- Backend: Node.js 22, Express 5, Socket.IO 4, Prisma, PostgreSQL, JWT auth, Peer server, optional Redis adapter
 
-### 1. Backend
+## Repository Layout
+
+```text
+backend/
+  prisma/
+  src/
+frontend/
+  src/
+```
+
+## Prerequisites
+
+- Node.js 22.x
+- npm
+- PostgreSQL
+- Optional for production-grade realtime scaling: Redis
+
+## Quick Start
+
+### 1) Backend
 
 ```bash
 cd backend
 cp .env.example .env
 npm install
+npx prisma generate
 npx prisma migrate dev --name init
 npm run dev
 ```
 
-Backend runs on `http://localhost:4000`.
+Backend runs on http://localhost:4000.
 
-### 2. Frontend
+Health check: GET http://localhost:4000/api/health
+
+### 2) Frontend
 
 ```bash
 cd frontend
@@ -28,237 +50,130 @@ npm install
 npm run dev
 ```
 
-Frontend runs on `http://localhost:5173`.
+Frontend runs on http://localhost:5173.
 
-## Phase 1 Auth Endpoints
+## Feature Summary
 
-- `POST /api/auth/register`
-- `POST /api/auth/login`
-- `POST /api/auth/refresh`
-- `POST /api/auth/logout`
-- `GET /api/auth/me`
+### Auth
 
-## Phase 2 Media
+- Register, login, refresh, logout, current-user profile
+- JWT access + refresh token flow
+- Cookie-based refresh token handling
 
-Implemented features:
+### Media
 
-- React media room at `/media` (protected route)
-- `ReactPlayer` unified playback for YouTube and direct URLs
-- `Plyr.js` + `hls.js` player mode for HLS (`.m3u8`) and file URLs
-- YouTube Data API search endpoint
-- Spotify Web API search endpoint (client credentials)
-- Spotify auth/token helpers + Web Playback SDK panel (premium user token required)
-- Media upload endpoint with `multer`
-- Storage adapters:
-  - Local filesystem (`MEDIA_STORAGE=local`)
-  - S3-compatible (AWS S3 / Cloudflare R2) (`MEDIA_STORAGE=s3`)
-- Optional FFmpeg transcode on video upload
+- Protected media room route
+- Unified playback for YouTube and direct URLs
+- HLS playback support via hls.js + Plyr
+- Media upload endpoint with local or S3-compatible storage
+- Optional ffmpeg transcode pipeline
+- YouTube and Spotify search integrations
 
-## Phase 3 Realtime Sync
+### Realtime Sync
 
-Implemented features:
+- JWT-protected Socket.IO connection
+- Room join/leave and state snapshot sync
+- Sync events for source, play/pause, seek, buffering, playback rate
+- Presence updates per room
+- Redis-backed adapter/state store when REDIS_URL is configured
 
-- Socket.IO v4 server attached to the backend HTTP server
-- JWT-protected socket authentication (same access token flow as API)
-- Room join/leave + room snapshot sync
-- Sync events for:
-  - `sync:source-change`
-  - `sync:play`
-  - `sync:pause`
-  - `sync:seek`
-  - `sync:buffer`
-  - `sync:rate-change`
-- Realtime room presence updates (`presence:update`)
-- Redis adapter + Redis-backed state store when `REDIS_URL` is configured
-- Automatic in-memory fallback when Redis is unavailable
+### Realtime Chat
 
-### Phase 3 Env
+- Chat over the authenticated Socket.IO channel
+- PostgreSQL persistence through Prisma
+- Room history replay on join/snapshot
+- Message types: TEXT and GIF
 
-Backend (`backend/.env`):
+### Video Call (WebRTC)
 
-```bash
-REDIS_URL=
-SOCKET_CORS_ORIGIN=http://localhost:5173
-SOCKET_PATH=/socket.io
-SYNC_STATE_TTL_SECONDS=86400
-SYNC_PRESENCE_TTL_SECONDS=3600
-```
+- Self-hosted PeerJS signaling endpoint on backend
+- In-room peer announcements over Socket.IO
+- Local + remote stream rendering in frontend panel
+- Dynamic ICE provider support: stun, twilio, metered, custom
 
-Frontend (`frontend/.env`):
+## API Endpoints
 
-```bash
-VITE_API_URL=http://localhost:4000/api
-VITE_SOCKET_URL=http://localhost:4000
-VITE_SOCKET_PATH=/socket.io
-```
+### Auth
 
-## Phase 4 Realtime Chat
+- POST /api/auth/register
+- POST /api/auth/login
+- POST /api/auth/refresh
+- POST /api/auth/logout
+- GET /api/auth/me
 
-Implemented features:
+### Media
 
-- Chat runs on the same authenticated Socket.IO connection as sync.
-- Room chat history is loaded from PostgreSQL on join/snapshot.
-- New chat messages are persisted via Prisma and broadcast in real time.
-- Message types supported:
-  - `TEXT`
-  - `GIF` (URL-based, optional Giphy API integration can be added later)
-- Frontend custom chat panel includes:
-  - Emoji picker via Emoji Mart
-  - Timestamp formatting via `date-fns`
-  - Message history + live updates in each room
+- GET /api/media/youtube/search?q=...
+- GET /api/media/spotify/search?q=...
+- GET /api/media/spotify/config
+- GET /api/media/spotify/auth-url
+- POST /api/media/spotify/token
+- POST /api/media/spotify/refresh
+- POST /api/media/upload (form-data key: media)
 
-### Phase 4 Socket Events
+### WebRTC
 
-- `chat:send`
-- `chat:new`
-- `chat:history-request`
-- `chat:history`
+- GET /api/webrtc/config
+- GET /api/webrtc/ice-servers
 
-### Phase 4 Env
+## Realtime Socket Events
 
-Backend (`backend/.env`):
+### Sync
 
-```bash
-CHAT_HISTORY_LIMIT=50
-CHAT_MAX_MESSAGE_LENGTH=1200
-```
+- sync:source-change
+- sync:play
+- sync:pause
+- sync:seek
+- sync:buffer
+- sync:rate-change
+- presence:update
 
-### DB Note (Phase 4)
+### Chat
 
-If `prisma db push` fails in your local setup, run the manual SQL script:
+- chat:send
+- chat:new
+- chat:history-request
+- chat:history
 
-`backend/prisma/manual/phase4_chat.sql`
+### WebRTC
 
-## Phase 5 Video Call (WebRTC)
+- webrtc:announce
+- webrtc:update-media
+- webrtc:clear
+- webrtc:peer-announced
+- webrtc:peer-cleared
 
-Implemented features:
+## Environment Variables
 
-- Self-hosted PeerJS signaling server mounted inside backend Node server
-- Native WebRTC media capture with `navigator.mediaDevices.getUserMedia`
-- Browser compatibility guard for `RTCPeerConnection`
-- Room-aware peer announcement using the existing authenticated Socket.IO room
-- Frontend video/voice panel with:
-  - Join/leave call
-  - Mute/unmute
-  - Camera on/off
-  - Local preview + remote streams
-- Dynamic ICE server config API with provider support:
-  - `stun` (default, Google STUN)
-  - `twilio` (Twilio Network Traversal Service tokens)
-  - `metered` (static Metered TURN credentials)
-  - `custom` (JSON-configured ICE servers)
+Use these files as the source of truth:
 
-### Phase 5 API Endpoints
+- backend/.env.example
+- frontend/.env.example
 
-- `GET /api/webrtc/config`
-- `GET /api/webrtc/ice-servers`
+Important backend keys:
 
-### Phase 5 Socket Events
+- DATABASE_URL
+- JWT_ACCESS_SECRET
+- JWT_REFRESH_SECRET
+- CLIENT_ORIGIN
+- REDIS_URL (optional)
+- MEDIA_STORAGE and S3_* keys (if using S3/R2)
+- WEBRTC_ICE_PROVIDER plus provider-specific keys
 
-- `webrtc:announce`
-- `webrtc:update-media`
-- `webrtc:clear`
-- `webrtc:peer-announced`
-- `webrtc:peer-cleared`
+Important frontend keys:
 
-### Phase 5 Env
+- VITE_API_URL
+- VITE_SOCKET_URL
+- VITE_SOCKET_PATH
 
-Backend (`backend/.env`):
+## Database Notes
 
-```bash
-PEER_SERVER_PATH=/peerjs
-PEER_SERVER_KEY=peerjs
-PEER_SERVER_URL=
-PEER_SERVER_PROXIED=true
-PEER_SERVER_ALLOW_DISCOVERY=false
-PEER_SERVER_CONCURRENT_LIMIT=5000
-PEER_SERVER_ALIVE_TIMEOUT_MS=60000
-PEER_SERVER_EXPIRE_TIMEOUT_MS=5000
-WEBRTC_ICE_PROVIDER=stun
-WEBRTC_STUN_URLS=stun:stun.l.google.com:19302
-WEBRTC_ICE_TTL_SECONDS=3600
-WEBRTC_ICE_SERVERS_JSON=
-TWILIO_ACCOUNT_SID=
-TWILIO_AUTH_TOKEN=
-METERED_TURN_URLS=
-METERED_TURN_USERNAME=
-METERED_TURN_CREDENTIAL=
-```
+If you hit local setup issues for chat schema creation, run:
 
-### Phase 2 API Endpoints
+- backend/prisma/manual/phase4_chat.sql
 
-- `GET /api/media/youtube/search?q=...`
-- `GET /api/media/spotify/search?q=...`
-- `GET /api/media/spotify/config`
-- `GET /api/media/spotify/auth-url`
-- `POST /api/media/spotify/token`
-- `POST /api/media/spotify/refresh`
-- `POST /api/media/upload` (form-data key: `media`)
+## Production Notes
 
-### Backend Env (Phase 2)
-
-Add these to `backend/.env`:
-
-```bash
-YOUTUBE_API_KEY=
-SPOTIFY_CLIENT_ID=
-SPOTIFY_CLIENT_SECRET=
-SPOTIFY_REDIRECT_URI=http://localhost:5173/media
-MEDIA_STORAGE=local
-MAX_UPLOAD_MB=200
-ENABLE_TRANSCODE=false
-FFMPEG_PATH=ffmpeg
-S3_REGION=auto
-S3_ENDPOINT=
-S3_BUCKET=
-S3_ACCESS_KEY_ID=
-S3_SECRET_ACCESS_KEY=
-S3_PUBLIC_BASE_URL=
-```
-
-### Storage Notes
-
-- For local uploads, files are served from `backend/uploads` via `/uploads/*`.
-- For Cloudflare R2, use S3-compatible values:
-  - `S3_ENDPOINT=https://<accountid>.r2.cloudflarestorage.com`
-  - `S3_BUCKET=<bucket-name>`
-  - `S3_ACCESS_KEY_ID=<r2-key>`
-  - `S3_SECRET_ACCESS_KEY=<r2-secret>`
-  - Optional public base URL via `S3_PUBLIC_BASE_URL`
-
-## Voice/Socket Hosting on Heroku
-
-If you want voice-chat signaling sockets to stay active, deploy the socket backend on Heroku using a **Basic or higher** web dyno type (not Eco).
-
-### Deploy backend to Heroku (from `backend` directory)
-
-```bash
-cd backend
-heroku login
-heroku create cozzywood-socket
-heroku config:set NODE_ENV=production
-heroku config:set CLIENT_ORIGIN=https://your-frontend-domain
-heroku config:set DATABASE_URL=your_postgres_url
-heroku config:set JWT_ACCESS_SECRET=your_access_secret
-heroku config:set JWT_REFRESH_SECRET=your_refresh_secret
-heroku config:set PEER_SERVER_PROXIED=true
-heroku config:set PEER_SERVER_PATH=/peerjs
-heroku config:set WEBRTC_ICE_PROVIDER=twilio
-heroku config:set TWILIO_ACCOUNT_SID=your_twilio_sid
-heroku config:set TWILIO_AUTH_TOKEN=your_twilio_auth_token
-git init
-git add .
-git commit -m "Initial backend deploy"
-heroku git:remote -a cozzywood-socket
-git push heroku main
-```
-
-Then in Heroku Dashboard:
-
-- Set dyno type to **Basic** (or Standard/Performance)
-- Scale `web` to `1+`
-
-### Socket reliability notes
-
-- Send heartbeat pings on your socket connection to avoid idle disconnects.
-- If you scale to multiple dynos later, use Redis pub/sub adapter for Socket.IO.
+- Set PEER_SERVER_PROXIED=true when behind a reverse proxy
+- If scaling to multiple backend instances, configure Redis for Socket.IO adapter/state sync
+- Ensure frontend origin and socket CORS settings match your deployed domains

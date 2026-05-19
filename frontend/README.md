@@ -1,16 +1,63 @@
-# React + Vite
+# Cozzywood Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite client for Cozzywood media rooms.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React 19
+- Vite 8
+- React Router DOM
+- Axios
+- Socket.IO client
+- PeerJS
+- React Player
+- Plyr + hls.js
+- Emoji Mart
 
-## React Compiler
+## Scripts
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- npm run dev: start local dev server
+- npm run build: create production build
+- npm run preview: preview production build locally
+- npm run lint: run ESLint
 
-## Expanding the ESLint configuration
+## Local Development
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+cp .env.example .env
+npm install
+npm run dev
+```
+
+Default app URL: http://localhost:5173
+
+## Environment
+
+Defined in .env.example:
+
+```bash
+VITE_API_URL=http://localhost:4000/api
+VITE_SOCKET_URL=http://localhost:4000
+VITE_SOCKET_PATH=/socket.io
+```
+
+## Main Routes
+
+- /login
+- /register
+- /dashboard
+- /media
+
+## Key UI Modules
+
+- ProtectedRoute: auth gate for private routes
+- ReactUnifiedPlayer and HlsPlyrPlayer: playback components
+- RoomChatPanel: realtime room chat UI
+- VideoCallPanel: peer video/voice controls and streams
+- SpotifyWebPlaybackPanel: Spotify playback integration panel
+
+## Backend Dependency
+
+This frontend expects the backend API and socket server to be running.
+
+For full project setup, see the repository root README.
