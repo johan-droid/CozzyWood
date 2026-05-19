@@ -113,17 +113,17 @@ function RoomChatPanel({
   }
 
   return (
-    <section className="rounded-xl border border-slate-700 bg-slate-900/70 p-4">
+    <section className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-4">
       <div className="flex items-center justify-between gap-2">
         <h3 className="text-base font-semibold">Room Chat</h3>
-        <span className="rounded bg-slate-800 px-2 py-1 text-xs text-slate-300">
+        <span className="rounded bg-white/10 px-2 py-1 text-xs text-slate-300">
           {messages.length} messages
         </span>
       </div>
 
       <div
         ref={scrollContainerRef}
-        className="mt-3 max-h-80 space-y-2 overflow-y-auto rounded-lg border border-slate-700 bg-slate-950/70 p-2"
+        className="mt-3 max-h-80 space-y-2 overflow-y-auto rounded-lg border border-white/10 bg-black/30 p-2"
       >
         {messages.length ? (
           messages.map((message) => {
@@ -134,7 +134,7 @@ function RoomChatPanel({
                 className={`rounded-lg border px-3 py-2 text-sm ${
                   isOwnMessage
                     ? "border-amber-700/70 bg-amber-950/20"
-                    : "border-slate-700 bg-slate-900/80"
+                    : "border-white/10 bg-slate-900/80"
                 }`}
               >
                 <div className="mb-1 flex items-center justify-between gap-2">
@@ -151,7 +151,7 @@ function RoomChatPanel({
                   <img
                     src={message.gifUrl}
                     alt="GIF message"
-                    className="max-h-44 w-auto rounded-md border border-slate-700"
+                    className="max-h-44 w-auto rounded-md border border-white/10"
                   />
                 ) : (
                   <p className="whitespace-pre-wrap break-words text-slate-200">{message.text}</p>
@@ -177,7 +177,7 @@ function RoomChatPanel({
             onChange={(event) => setTextDraft(event.target.value)}
             disabled={disabled || isSending}
             placeholder={roomId ? "Type a message..." : "Join a room to chat"}
-            className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm outline-none ring-amber-500/50 focus:ring disabled:cursor-not-allowed disabled:opacity-70"
+            className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2 text-sm outline-none ring-amber-500/50 focus:ring disabled:cursor-not-allowed disabled:opacity-70"
           />
           <button
             type="submit"
@@ -215,7 +215,7 @@ function RoomChatPanel({
             onChange={(event) => setGifUrlDraft(event.target.value)}
             disabled={disabled || isSending}
             placeholder="https://media.giphy.com/..."
-            className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm outline-none ring-emerald-500/50 focus:ring disabled:cursor-not-allowed disabled:opacity-70"
+            className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2 text-sm outline-none ring-emerald-500/50 focus:ring disabled:cursor-not-allowed disabled:opacity-70"
           />
           <button
             type="button"
@@ -229,7 +229,7 @@ function RoomChatPanel({
       ) : null}
 
       {showEmojiPicker ? (
-        <div className="mt-2 overflow-hidden rounded-lg border border-slate-700">
+        <div className="mt-2 overflow-hidden rounded-lg border border-white/10">
           <Picker
             data={data}
             onEmojiSelect={handleEmojiSelect}

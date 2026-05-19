@@ -756,10 +756,10 @@ function MediaPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100">
+    <main className="min-h-screen bg-black/30 text-slate-100">
       <section className="mx-auto grid w-full max-w-7xl gap-6 px-5 py-8 lg:grid-cols-[340px_1fr]">
         <aside className="space-y-5">
-          <div className="rounded-xl border border-slate-700 bg-slate-900/70 p-4">
+          <div className="rounded-xl border border-white/10 bg-slate-900/40 backdrop-blur-md p-4">
             <p className="text-xs uppercase tracking-[0.2em] text-amber-300">Cozzywood Phase 5</p>
             <h1 className="mt-2 text-xl font-semibold">Media + Realtime Sync</h1>
             <p className="mt-1 text-sm text-slate-300">Signed in as {user?.name}</p>
@@ -768,17 +768,17 @@ function MediaPage() {
             </Link>
           </div>
 
-          <div className="rounded-xl border border-slate-700 bg-slate-900/70 p-4">
+          <div className="rounded-xl border border-white/10 bg-slate-900/40 backdrop-blur-md p-4">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-200">Room Sync</h2>
             <p className="mt-2 text-xs text-slate-400">Socket server: {socketServerUrl}</p>
-            <div className="mt-2 inline-flex rounded bg-slate-800 px-2 py-1 text-xs">
+            <div className="mt-2 inline-flex rounded bg-white/10 px-2 py-1 text-xs">
               Status: {socketStatus}
             </div>
             <input
               value={roomInput}
               onChange={(event) => setRoomInput(event.target.value)}
               placeholder="room id"
-              className="mt-3 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm outline-none ring-amber-500/50 focus:ring"
+              className="mt-3 w-full rounded-md border border-white/10 bg-black/30 px-4 py-2.5 text-sm outline-none transition-all focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/50"
             />
             <div className="mt-2 grid grid-cols-3 gap-2">
               <button
@@ -809,13 +809,13 @@ function MediaPage() {
             <p className="mt-2 text-xs text-slate-400">Active room: {activeRoomId || "-"}</p>
           </div>
 
-          <div className="rounded-xl border border-slate-700 bg-slate-900/70 p-4">
+          <div className="rounded-xl border border-white/10 bg-slate-900/40 backdrop-blur-md p-4">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-200">Load URL</h2>
             <input
               value={urlInput}
               onChange={(event) => setUrlInput(event.target.value)}
               placeholder="https://example.com/video.mp4 or .m3u8"
-              className="mt-2 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm outline-none ring-amber-500/50 focus:ring"
+              className="mt-2 w-full rounded-md border border-white/10 bg-black/30 px-4 py-2.5 text-sm outline-none transition-all focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/50"
             />
             <div className="mt-2 flex gap-2">
               <button
@@ -835,7 +835,7 @@ function MediaPage() {
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-700 bg-slate-900/70 p-4">
+          <div className="rounded-xl border border-white/10 bg-slate-900/40 backdrop-blur-md p-4">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-200">Upload Personal Media</h2>
             <input
               type="file"
@@ -846,7 +846,7 @@ function MediaPage() {
             <p className="mt-2 text-xs text-slate-400">Backend storage and FFmpeg transcoding are configurable via server env vars.</p>
           </div>
 
-          <div className="rounded-xl border border-slate-700 bg-slate-900/70 p-4">
+          <div className="rounded-xl border border-white/10 bg-slate-900/40 backdrop-blur-md p-4">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-200">Spotify Account</h2>
             <div className="mt-2 flex flex-wrap gap-2">
               <button
@@ -869,18 +869,18 @@ function MediaPage() {
         </aside>
 
         <div className="space-y-5">
-          <div className="rounded-xl border border-slate-700 bg-slate-900/70 p-4">
+          <div className="rounded-xl border border-white/10 bg-slate-900/40 backdrop-blur-md p-4">
             <div className="mb-3 flex flex-wrap items-center gap-2">
               <span className="text-xs uppercase tracking-wide text-slate-300">Current Engine</span>
-              <span className="rounded bg-slate-800 px-2 py-1 text-xs">{playerEngine}</span>
+              <span className="rounded bg-white/10 px-2 py-1 text-xs">{playerEngine}</span>
               {isHlsSource ? <span className="rounded bg-sky-900 px-2 py-1 text-xs text-sky-100">HLS URL</span> : null}
               {activeRoomId ? <span className="rounded bg-emerald-900 px-2 py-1 text-xs text-emerald-100">Room: {activeRoomId}</span> : null}
             </div>
             <div className="mb-3 flex flex-wrap gap-2 text-xs text-slate-300">
-              <span className="rounded bg-slate-800 px-2 py-1">Time: {currentPositionSeconds.toFixed(1)}s</span>
-              <span className="rounded bg-slate-800 px-2 py-1">Rate: {playbackRate.toFixed(2)}x</span>
-              <span className="rounded bg-slate-800 px-2 py-1">{playerPlaying ? "Playing" : "Paused"}</span>
-              <span className="rounded bg-slate-800 px-2 py-1">{isBuffering ? "Buffering" : "Stable"}</span>
+              <span className="rounded bg-white/10 px-2 py-1">Time: {currentPositionSeconds.toFixed(1)}s</span>
+              <span className="rounded bg-white/10 px-2 py-1">Rate: {playbackRate.toFixed(2)}x</span>
+              <span className="rounded bg-white/10 px-2 py-1">{playerPlaying ? "Playing" : "Paused"}</span>
+              <span className="rounded bg-white/10 px-2 py-1">{isBuffering ? "Buffering" : "Stable"}</span>
             </div>
             {playerEngine === "plyr" ? (
               <HlsPlyrPlayer
@@ -920,13 +920,13 @@ function MediaPage() {
             ) : null}
           </div>
 
-          <div className="rounded-xl border border-slate-700 bg-slate-900/70 p-4">
+          <div className="rounded-xl border border-white/10 bg-slate-900/40 backdrop-blur-md p-4">
             <h3 className="text-base font-semibold">Room Presence</h3>
             <p className="mt-1 text-xs text-slate-400">Users online in this room: {presenceUsers.length}</p>
             {presenceUsers.length ? (
               <ul className="mt-3 space-y-2">
                 {presenceUsers.map((presence) => (
-                  <li key={presence.socketId} className="rounded-md border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm">
+                  <li key={presence.socketId} className="rounded-md border border-white/10 bg-black/20 px-3 py-2 text-sm">
                     <p className="font-medium">
                       {presence.name || "User"}
                       {presence.userId === user?.id ? " (You)" : ""}
@@ -961,14 +961,14 @@ function MediaPage() {
           <SpotifyWebPlaybackPanel token={spotifyUserToken} selectedUri={selectedSpotifyUri} />
 
           <div className="grid gap-5 xl:grid-cols-2">
-            <section className="rounded-xl border border-slate-700 bg-slate-900/70 p-4">
+            <section className="rounded-xl border border-white/10 bg-slate-900/40 backdrop-blur-md p-4">
               <h2 className="text-lg font-semibold">YouTube Search</h2>
               <form className="mt-2 flex gap-2" onSubmit={handleYoutubeSearch}>
                 <input
                   value={youtubeQuery}
                   onChange={(event) => setYoutubeQuery(event.target.value)}
                   placeholder="Search YouTube videos..."
-                  className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm outline-none ring-amber-500/50 focus:ring"
+                  className="w-full rounded-md border border-white/10 bg-black/30 px-4 py-2.5 text-sm outline-none transition-all focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/50"
                 />
                 <button type="submit" className="rounded-md bg-amber-500 px-3 py-2 text-sm font-medium text-slate-950">
                   Search
@@ -976,7 +976,7 @@ function MediaPage() {
               </form>
               <ul className="mt-3 space-y-2">
                 {youtubeResults.map((item) => (
-                  <li key={item.id} className="rounded-lg border border-slate-700 bg-slate-950/60 p-2">
+                  <li key={item.id} className="rounded-lg border border-white/10 bg-black/20 p-2">
                     <button
                       type="button"
                       onClick={() =>
@@ -996,14 +996,14 @@ function MediaPage() {
               </ul>
             </section>
 
-            <section className="rounded-xl border border-slate-700 bg-slate-900/70 p-4">
+            <section className="rounded-xl border border-white/10 bg-slate-900/40 backdrop-blur-md p-4">
               <h2 className="text-lg font-semibold">Spotify Search</h2>
               <form className="mt-2 flex gap-2" onSubmit={handleSpotifySearch}>
                 <input
                   value={spotifyQuery}
                   onChange={(event) => setSpotifyQuery(event.target.value)}
                   placeholder="Search tracks/albums/playlists..."
-                  className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm outline-none ring-emerald-500/40 focus:ring"
+                  className="w-full rounded-md border border-white/10 bg-black/30 px-4 py-2.5 text-sm outline-none transition-all focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/50"
                 />
                 <button type="submit" className="rounded-md bg-emerald-400 px-3 py-2 text-sm font-medium text-slate-950">
                   Search
@@ -1011,7 +1011,7 @@ function MediaPage() {
               </form>
               <ul className="mt-3 space-y-2">
                 {spotifyResults.tracks.map((item) => (
-                  <li key={item.id} className="rounded-lg border border-slate-700 bg-slate-950/60 p-2">
+                  <li key={item.id} className="rounded-lg border border-white/10 bg-black/20 p-2">
                     <div className="flex items-center gap-3">
                       <img src={item.thumbnail} alt="" className="h-12 w-12 rounded object-cover" />
                       <div className="min-w-0 flex-1">
@@ -1039,7 +1039,7 @@ function MediaPage() {
           </div>
 
           {statusMessage ? (
-            <p className="rounded-md border border-slate-700 bg-slate-900/80 px-3 py-2 text-sm text-slate-200">
+            <p className="rounded-md border border-white/10 bg-slate-900/60 px-3 py-2 text-sm text-slate-200">
               {statusMessage}
             </p>
           ) : null}
