@@ -4,7 +4,25 @@
   <img src="./readme-banner.svg" alt="Cozzywood animated banner" width="100%" />
 </p>
 
+<p align="center">
+  <a href="./package.json"><img src="https://img.shields.io/badge/root-vite%20%2B%20react-111827?style=for-the-badge" alt="Root app stack" /></a>
+  <a href="./backend/package.json"><img src="https://img.shields.io/badge/backend-node%20%2B%20express-0f172a?style=for-the-badge" alt="Backend stack" /></a>
+  <a href="./frontend/package.json"><img src="https://img.shields.io/badge/frontend-react%20app-1f2937?style=for-the-badge" alt="Frontend stack" /></a>
+  <a href="./backend/prisma/schema.prisma"><img src="https://img.shields.io/badge/database-prisma%20%2B%20postgres-334155?style=for-the-badge" alt="Database stack" /></a>
+</p>
+
 Cozzywood is a full-stack media room platform with synchronized playback, realtime chat, uploads, Spotify and YouTube integrations, and browser-based video calls.
+
+<p align="center">
+  <strong>Three surfaces, one workspace:</strong> the root design-system demo, the backend media platform, and the frontend room client.
+</p>
+
+```text
+d:\Cozzywood
+├─ src/              # Root demo / landing experience
+├─ backend/          # API, realtime, Prisma, WebRTC signaling
+└─ frontend/         # Media room client UI
+```
 
 ## Quick Links
 
