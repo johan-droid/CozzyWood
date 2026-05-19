@@ -1,0 +1,31 @@
+```
+# Dependencies
+node_modules/
+
+# Build artifacts
+dist/
+*.js
+*.css
+
+# Environment variables
+.env*
+
+# IDE
+.vscode/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Package manager
+package-lock.json
+
+# Vite
+.vite/
+
+# TypeScript
+*.tsbuildinfo
+```
